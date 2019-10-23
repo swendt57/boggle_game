@@ -102,6 +102,6 @@ class TestBoggle(unittest.TestCase):
         Test that the 'get dictionary' function returns a dictionary
         that has a  length greater than 0
         """
-        dictionary = boggle.getDictionary('words.txt')
+        dictionary = boggle.get_dictionary('words.txt')
         self.assertGreater(len(dictionary), 0)
         

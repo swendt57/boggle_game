@@ -1,5 +1,6 @@
 from string import ascii_uppercase
 from random import choice
+import time
 
 def make_grid(width, height):
     """
@@ -56,7 +57,16 @@ def path_to_word(grid, path):
     """
     # print(grid)
     # print(path)
-    return "".join([grid[p] for p in path])
+    
+    word = "".join([grid[p] for p in path])
+    
+    # print(word)
+    
+    return word
+    
+def word_in_dictionary(word, dict):
+    return word in dict
+    
     
 def search(grid, dictionary):
     """
@@ -68,8 +78,11 @@ def search(grid, dictionary):
     
     def do_search(path):
         word = path_to_word(grid, path)
-        if word in dictionary:
+        if(word_in_dictionary(word, dictionary)):
             paths.append(path)
+            
+            # print(word)
+            
         for next_pos in neighbors[path[-1]]:
             if next_pos not in path:
                 do_search(path + [next_pos])
@@ -82,9 +95,36 @@ def search(grid, dictionary):
         words.append(path_to_word(grid, path))
     return set(words)
         
-def getDictionary(dictionary_file):
+def get_dictionary(dictionary_file):
     """
     Load dictionary file
     """
     with open(dictionary_file) as f:
-        return [w.strip().upper() for w in f]
+        return {w.strip().upper() for w in f}
+        
+def display_words(words):
+    for word in words:
+        print(word)
+    print("Found %s words"% len(words))
+    
+        
+def main():
+    """
+    This main function runs the whole project
+    """
+    start = time.time()
+    
+    grid = make_grid(4,4)
+    
+    print(grid)
+    
+    dictionary = get_dictionary('words.txt')
+    words = search(grid, dictionary)
+    display_words(words)
+    
+    end = time.time()
+    print("It took: " + str(round((end - start), 4)) + " seconds")
+
+# this prevents main from firing when running unit tests   
+if(__name__ == "__main__"):
+    main()
